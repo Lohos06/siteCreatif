@@ -1,0 +1,25 @@
+{
+  "pages": [
+    {
+        "id": 1,
+        "premiereLettre": "T",
+        "paragraphe1": "est",
+        "paragraphe2": "test2",
+        "paragraphe3": "test3"
+    },
+    {
+        "id": 1,
+        "premiereLettre": "T",
+        "paragraphe1": "est",
+        "paragraphe2": "test2",
+        "paragraphe3": "test3"
+    },
+    {
+        "id": 1,
+        "premiereLettre": "T",
+        "paragraphe1": "est",
+        "paragraphe2": "test2",
+        "paragraphe3": "test3"
+    }
+  ]
+}

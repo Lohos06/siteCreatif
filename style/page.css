@@ -1,0 +1,20 @@
+.ancre {
+    position: relative;
+    display: inline-block;
+    width: 0;
+    height: 0;
+}
+
+.plume {
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    height: 3rem;
+    transform-origin: bottom center;
+    animation: ecriture 0.35s ease-in-out infinite alternate;
+}
+
+@keyframes ecriture {
+    from { transform: translate(-1rem) rotate(50deg); }
+    to   { transform: translate(-1rem, -0.5rem) rotate(60deg) translateY(3px); }
+}
