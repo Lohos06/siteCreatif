@@ -1,9 +1,3 @@
-.page {
-    display: flex;
-    flex-direction: column;
-    gap: 3rem;
-}
-
 .premiereLettre {
   font-size: 6rem;
   float: left;

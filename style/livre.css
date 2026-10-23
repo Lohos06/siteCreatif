@@ -1,0 +1,39 @@
+#livre {
+    position: relative;
+    width: 80dvw;
+    height: 50dvh;
+    perspective: 2000px;
+}
+
+.feuille {
+    transform-style: preserve-3d;
+    transform-origin: left;
+    position: absolute;
+    right: 0;
+    top: 0;
+    width: 50%;
+    height: 100%;
+
+    z-index: var(--z-ferme);
+    transition: transform 1s ease-in-out, z-index 0s 0.5s;
+}
+
+.tournee {
+    transform: rotateY(-180deg);
+    z-index: var(--z-tourne);
+}
+
+.page {
+    position: absolute;
+    backface-visibility: hidden;
+    inset: 0;
+    background-color: beige;
+    display: flex;
+    flex-direction: column;
+    gap: 3rem;
+}
+
+
+.verso {
+    transform: rotateY(180deg)
+}

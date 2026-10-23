@@ -1,0 +1,26 @@
+body {
+    display: flex;
+    flex-direction: column;
+    min-height: 100dvh;
+}
+
+header, footer {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 10dvh;
+}
+
+main {
+    display: flex;
+    flex-grow: 1;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 3rem;
+}
+
+#barreDeProgression {
+    width: 80dvw;
+    height: 10dvh;
+}
