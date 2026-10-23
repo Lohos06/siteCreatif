@@ -1,50 +1,64 @@
-// recuperation du contenu des pages
 const livreContainer = document.getElementById('livre');
-let demandePage = null
-let pages = null
 
-async function recupererPages() {
-    demandePage = await fetch("pages.json");
-    pages = await demandePage.json();
+// recuperation du contenu des pages
+const requete = new XMLHttpRequest();
+requete.open("GET", "pages.json", false); // false = synchrone : le script attend la réponse
+requete.send();
+const pages = JSON.parse(requete.responseText).pages;
 
-    console.log(pages);
+
+// creer une page
+function creerPage(pageNumber) {
+
+    let page = document.createElement("div");
+    page.classList.add('page')
+    livreContainer.append(page);
+
+    Object.keys(pages[pageNumber]).forEach(key => {
+        if (key.startsWith('paragraphe')) {
+            let paragrapheContainer = document.createElement("div");
+
+            if (key === "paragraphe1") {
+                let premiereLettre = document.createElement('span')
+                premiereLettre.classList.add('premiereLettre');
+                premiereLettre.textContent = pages[pageNumber]["premiereLettre"];
+                paragrapheContainer.append(premiereLettre);
+            }
+
+            let paragraphe = pages[pageNumber][key]
+            let paragrapheLignes = paragraphe.split("|");
+            animerTexte(paragrapheContainer, paragrapheLignes)
+            page.append(paragrapheContainer);
+        }
+    });
+
 }
-recupererPages();
-
+creerPage(0)
 
 
 // animation du texte (en gros j'ecris avec une plume)
-const lignes = ["Première ligne", "Deuxième ligne", "Troisième ligne"];
-const pause = (ms) => new Promise(resolve => setTimeout(resolve, ms));
+async function animerTexte(paragrapheContainer, paragrapheContent) {
+    const pause = (ms) => new Promise(resolve => setTimeout(resolve, ms));
 
-const plume = document.createElement("img");
-plume.src = "assets/plume.png";
-plume.className = "plume";
+    let plume = document.createElement("img");
+    plume.src = "assets/plume.png";
+    plume.className = "plume";
 
-const ancre = document.createElement("span");
-ancre.className = "ancre";
-ancre.append(plume);
+    let ancre = document.createElement("span");
+    ancre.className = "ancre";
+    ancre.append(plume);
 
-async function animerTexte() {
-    const conteneur = document.getElementById("texte");
-
-    for (const ligne of lignes) {
+    for (let ligne of paragrapheContent) {
         const p = document.createElement("p");
-        const span = document.createElement("span");
-        p.append(span, ancre);
-        conteneur.append(p);
-
+        paragrapheContainer.append(p);
+        p.append(ancre)
         await pause(600);
-
         for (const lettre of ligne) {
-            span.textContent += lettre;
+            ancre.before(lettre)
             await pause(80);
         }
-
-        await pause(800);
+        await pause(200);
     }
 
     ancre.remove();
 }
-
-animerTexte();

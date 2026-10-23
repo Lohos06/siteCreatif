@@ -1,3 +1,15 @@
+.page {
+    display: flex;
+    flex-direction: column;
+    gap: 3rem;
+}
+
+.premiereLettre {
+  font-size: 6rem;
+  float: left;
+  line-height : 0.7;
+}
+
 .ancre {
     position: relative;
     display: inline-block;
