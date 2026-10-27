@@ -1,123 +1,127 @@
 const livreContainer = document.getElementById('livre');
 
-// recuperation du contenu des pages
-const requete = new XMLHttpRequest();
-requete.open("GET", "pages.json", false);
-requete.send();
-const pages = JSON.parse(requete.responseText).pages;
-let nombreDeFeuilles = Math.ceil(pages.length / 2)
+const TIME_BETWEEN_LETTERS = 100;
+const TIME_BETWEEN_LINES = 500;
+const PAGE_TURN_COOLDOWN = 500;
 
-// creer les feuilles
+const pause = (ms) => new Promise(resolve => setTimeout(resolve, ms));
+
+let pages = null;
+let nombreDeFeuilles = null;
+let feuilles = null;
+let progression = 0;
+let verrou = false;
+
+// charger les pages
+async function chargerPages() {
+    const pageRequete = await fetch("pages.json")
+    const pagesData = await pageRequete.json();
+    return pagesData.pages
+}
+
+// creer les elements du livre
 function creerFeuilles() {
-
     for (let i = 0; i < nombreDeFeuilles; i++) {
-        let feuille = document.createElement('div');
-        feuille.id = "feuille-" + i;
+        const idRecto = i * 2;
+        const idVerso = i * 2 + 1;
+
+        const feuille = document.createElement('div');
+        feuille.id = `feuille-${i}`;
         feuille.classList.add('feuille');
         feuille.style.setProperty("--z-ferme", nombreDeFeuilles - i);
         feuille.style.setProperty("--z-tourne", i + 1);
         livreContainer.append(feuille);
 
-        creerPage(i * 2, feuille)
-        if (i * 2 + 1 < pages.length) {
-            creerPage(i * 2 + 1, feuille, "verso")
+        creerPage(idRecto, feuille);
+        if (idVerso < pages.length) {
+            creerPage(idVerso, feuille, true);
         }
     }
 }
-creerFeuilles();
-const feuilles = document.  querySelectorAll(".feuille")
+function creerPage(pageNumber, feuille, verso = false) {
 
-// creer une page
-function creerPage(pageNumber, feuille, sens="recto") {
-
-    let page = document.createElement("div");
+    // creation de la div de la page
+    const page = document.createElement("div");
     page.classList.add('page')
-
-    if (sens === "verso") {
+    if (verso) {
         page.classList.add('verso')
     }
-
     feuille.append(page);
 
-    Object.keys(pages[pageNumber]).forEach(key => {
+    // remplissage de la page
+    const pageContent = pages[pageNumber];
+    for (const key of Object.keys(pageContent)) {
         if (key.startsWith('paragraphe')) {
-            let paragrapheContainer = document.createElement("div");
-
-            if (key === "paragraphe1") {
-                let premiereLettre = document.createElement('span')
-                premiereLettre.classList.add('premiereLettre');
-                premiereLettre.textContent = pages[pageNumber]["premiereLettre"];
-                paragrapheContainer.append(premiereLettre);
-            }
-
-            let paragraphe = pages[pageNumber][key]
-            let paragrapheLignes = paragraphe.split("|");
-            animerTexte(paragrapheContainer, paragrapheLignes)
-            page.append(paragrapheContainer);
+            page.append(creerParagraphe(pageContent, key));
         }
-    });
+    }
+}
+function creerParagraphe(pageContent, key) {
+    const paragrapheContainer = document.createElement("div");
+
+    if (key === "paragraphe1") {
+        const premiereLettre = document.createElement('span')
+        premiereLettre.classList.add('premiereLettre');
+        premiereLettre.textContent = pageContent["premiereLettre"];
+        paragrapheContainer.append(premiereLettre);
+    }
+
+    const paragraphe = pageContent[key]
+    const paragrapheLignes = paragraphe.split("|");
+    animerTexte(paragrapheContainer, paragrapheLignes)
+    return paragrapheContainer;
 }
 
 // animation du texte (en gros j'ecris avec une plume)
 async function animerTexte(paragrapheContainer, paragrapheContent) {
-    const pause = (ms) => new Promise(resolve => setTimeout(resolve, ms));
 
-    let plume = document.createElement("img");
+    const plume = document.createElement("img");
     plume.src = "assets/plume.png";
     plume.className = "plume";
 
-    let ancre = document.createElement("span");
+    const ancre = document.createElement("span");
     ancre.className = "ancre";
     ancre.append(plume);
 
-    for (let ligne of paragrapheContent) {
+    for (const ligne of paragrapheContent) {
         const p = document.createElement("p");
         paragrapheContainer.append(p);
         p.append(ancre)
-        await pause(600);
+        await pause(TIME_BETWEEN_LINES);
         for (const lettre of ligne) {
             ancre.before(lettre)
-            await pause(80);
+            await pause(TIME_BETWEEN_LETTERS);
         }
-        await pause(200);
     }
 
     ancre.remove();
 }
-
-
-// scroll des pages
-let progression = 0;
-let verroue = false
-
-livreContainer.addEventListener("wheel", (event) => {
-
-    if (verroue === true) {
-        return;
-    } else {
-        verroue = true;
-        setTimeout(() => {
-            verroue = false;
-        }, 1000);
-    }
-
-    if (event.deltaY > 0) {
-        progression += 1;
-    } else {
-        progression -= 1;
-    }
-
-    progression = Math.max(0, Math.min(progression, nombreDeFeuilles -1));
-    mettreAJour();
-    console.log(progression);
-});
-
-// fonction pour dire si une page est tournée
+// mettre a jour l'etat des feuilles
 function mettreAJour() {
     feuilles.forEach((feuille, i) => {
         feuille.classList.toggle('tournee', i < progression);
     })
 }
 
+async function init() {
+    pages = await chargerPages();
+    nombreDeFeuilles = Math.ceil(pages.length / 2)
 
+    creerFeuilles();
+    feuilles = document.querySelectorAll(".feuille")
+}
+init()
 
+// interaction avec le livre
+
+livreContainer.addEventListener("wheel", (event) => {
+
+    if (verrou) return;
+    verrou = true;
+    setTimeout(() => {verrou = false;}, PAGE_TURN_COOLDOWN);
+
+    progression += event.deltaY > 0 ? 1 : -1
+
+    progression = Math.max(0, Math.min(progression, nombreDeFeuilles - 1));
+    mettreAJour();
+});
