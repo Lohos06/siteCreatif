@@ -23,3 +23,7 @@ h2, h3, p {
   font-weight: 600;
   line-height : 1;
 }
+
+p {
+  font-size: 0.9rem;
+}
