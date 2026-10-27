@@ -1,0 +1,86 @@
+/* valeur du retard (géré par le js) */
+@property --pr {
+    syntax: "<number>";
+    inherits: true;
+    initial-value: 0;
+}
+
+/* ---------- barre : fond ---------- */
+#barre-progression {
+    --largeur: 300px;
+    --marge-x: 26px;
+    --duree: 0.7s;
+    --courbe: ease-in-out;
+    --retard-reflets: 0.15s;
+
+    /* variable d'animation pour faire un retard comme sur les vria mouvements */
+    --W: calc(var(--largeur) - 2 * var(--marge-x));
+    --p: 0;
+    --pr: var(--p);
+
+    position: relative;
+    width: var(--largeur);
+    aspect-ratio: 8 / 1;
+    padding: 7px var(--marge-x);
+    box-sizing: border-box;
+    background: url("../assets/barreFond.png") 0 0 / 100% 100%;
+
+    transition: --pr var(--duree) var(--courbe) var(--retard-reflets);
+}
+
+/* ---------- barre : cadre ---------- */
+#barre-progression::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: url("../assets/barreCadre.png") 0 0 / 100% 100%;
+    pointer-events: none;
+}
+
+/* ---------- remplissage ---------- */
+#barre-progression-remplie {
+    --front: 14px;
+    --masque:
+        linear-gradient(#000 0 0) left  / calc(100% - var(--front)) 100% no-repeat,
+        radial-gradient(ellipse 14px 55% at 0% 62%, #000 96%, transparent) right / var(--front) 100% no-repeat,
+        radial-gradient(ellipse  9px 22% at 0% 20%, #000 96%, transparent) right / var(--front) 100% no-repeat;
+    position: relative;
+    height: 100%;
+    width: calc(var(--p) * 100%);
+    border-radius: 3px 0 0 3px;
+    overflow: hidden;
+
+    background: linear-gradient(to bottom, #c0151f 0%, #9c0e17 40%, #6b0a10 80%, #4a060b 100%);
+
+    box-shadow:
+        inset 0 -3px 4px rgba(0, 0, 0, 0.5),
+        inset 0  1px 1px rgba(255, 150, 150, 0.2);
+
+    -webkit-mask: var(--masque);
+    mask: var(--masque);
+
+    transition: width var(--duree) var(--courbe);
+}
+
+/* ---------- reflets ---------- */
+#barre-progression-remplie::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    width: var(--W);
+    left: calc(var(--pr) * var(--W) - var(--W));
+
+    background:
+        radial-gradient(ellipse 26px 4px at  6% 24%, rgba(255, 255, 255, 0.35), transparent),
+        radial-gradient(ellipse  9px 3px at 17% 31%, rgba(255, 255, 255, 0.20), transparent),
+        radial-gradient(ellipse 34px 3px at 31% 21%, rgba(255, 255, 255, 0.18), transparent),
+        radial-gradient(ellipse 16px 3px at 44% 27%, rgba(255, 255, 255, 0.22), transparent),
+        radial-gradient(ellipse 22px 4px at 63% 23%, rgba(255, 255, 255, 0.30), transparent),
+        radial-gradient(ellipse 40px 3px at 80% 29%, rgba(255, 255, 255, 0.15), transparent),
+        radial-gradient(ellipse  5px 5px at 95% 22%, rgba(255, 255, 255, 0.30), transparent),
+        radial-gradient(ellipse  5px 5px at 24% 70%, rgba(255, 255, 255, 0.30), transparent),
+        radial-gradient(ellipse 12px 3px at 52% 73%, rgba(255, 190, 190, 0.16), transparent),
+        radial-gradient(ellipse  7px 4px at 71% 66%, rgba(255, 255, 255, 0.20), transparent),
+        radial-gradient(ellipse 10px 3px at 88% 74%, rgba(255, 190, 190, 0.18), transparent);
+}
