@@ -2,13 +2,19 @@ body {
     display: flex;
     flex-direction: column;
     min-height: 100dvh;
+    background: url("../assets/woodTableTexture.jpg") center / cover fixed;
 }
 
 header, footer {
     display: flex;
-    justify-content: center;
-    align-items: center;
+    padding: 0.6rem;
+}
+
+header {
+    background: url("../assets/parchemin.png") center bottom / cover;
     min-height: 10dvh;
+    justify-content: center;
+    align-items: top;
 }
 
 main {
@@ -18,6 +24,13 @@ main {
     justify-content: center;
     align-items: center;
     gap: 1rem;
+}
+
+footer {
+    background: url("../assets/parchemin.png") center top / cover;
+    min-height: 8dvh;
+    justify-content: left;
+    align-items: end;
 }
 
 #barreDeProgression {

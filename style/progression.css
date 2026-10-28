@@ -5,7 +5,7 @@
     initial-value: 0;
 }
 
-/* ---------- barre : fond ---------- */
+/* barre(le fond) */
 #barre-progression {
     --largeur: 300px;
     --marge-x: 26px;
@@ -28,7 +28,7 @@
     transition: --pr var(--duree) var(--courbe) var(--retard-reflets);
 }
 
-/* ---------- barre : cadre ---------- */
+/* bare(le cadre par dessus) */
 #barre-progression::after {
     content: "";
     position: absolute;
@@ -37,7 +37,7 @@
     pointer-events: none;
 }
 
-/* ---------- remplissage ---------- */
+/* jauge(rouge stylé) */
 #barre-progression-remplie {
     --front: 14px;
     --masque:
@@ -62,7 +62,7 @@
     transition: width var(--duree) var(--courbe);
 }
 
-/* ---------- reflets ---------- */
+/* reflet sur le rouge */
 #barre-progression-remplie::before {
     content: "";
     position: absolute;

@@ -1,6 +1,6 @@
 @font-face {
   font-family: 'Cinzel';
-  src: url('font/Cinzel.ttf') format('truetype');
+  src: url('../assets/font/Cinzel.ttf') format('truetype');
   font-weight: 400 900;
   font-style: normal;
   font-display: swap;
@@ -8,7 +8,7 @@
 
 @font-face {
   font-family: 'Pirata One';
-  src: url('font/PirataOne.ttf') format('truetype');
+  src: url('../assets/font/PirataOne.ttf') format('truetype');
   font-weight: 400;
   font-style: normal;
   font-display: swap;
