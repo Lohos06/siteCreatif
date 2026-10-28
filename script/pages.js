@@ -114,7 +114,7 @@ init()
 
 // interaction avec le livre
 
-livreContainer.addEventListener("wheel", (event) => {
+document.addEventListener("wheel", (event) => {
 
     if (verrou) return;
     verrou = true;
