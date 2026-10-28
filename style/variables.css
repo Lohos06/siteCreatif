@@ -1,0 +1,13 @@
+:root {
+    --parchemin-centre:#f7edd0;
+    --parchemin-bord:  #ecdcb0;
+    --encre: #1f130a;   
+
+    /* barre de progression */
+    --sang-1: #c0151f;
+    --sang-2: #9c0e17;
+    --sang-3: #6b0a10;
+    --sang-4: #4a060b;
+    --reflet-sang: 255 255 255;
+    --reflet-sang-chaud: 255 190 190;
+}

@@ -23,12 +23,16 @@
 .page {
     position: absolute;
     inset: 0;
+    backface-visibility: hidden;
     padding: 1rem;
     display: flex;
     flex-direction: column;
     gap: 3rem;
-    background-color: beige;
-    backface-visibility: hidden;
+    background-color: var(--parchemin);
+    background: radial-gradient(ellipse at center, var(--parchemin-centre) 0%, var(--parchemin-bord) 100%);
+    box-shadow:
+        inset 0 0 40px rgba(110, 75, 30, 0.25),
+        0 6px 16px rgba(0, 0, 0, 0.35);
 }
 
 .page.verso {
